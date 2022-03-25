@@ -32,3 +32,6 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# replit.com (formerly repl.it)
+.replit

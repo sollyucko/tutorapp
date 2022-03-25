@@ -1,5 +1,5 @@
 {
-  "name": "next-tailwind-starter",
+  "name": "tutorapp",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -12,6 +12,7 @@
     "react": "17.0.2",
     "react-dom": "17.0.2"
   },
+  "proxy": "https://code.linkaiwu.com/proxy/3000",
   "devDependencies": {
     "@types/react": "^17.0.38",
     "autoprefixer": "^10.4.2",

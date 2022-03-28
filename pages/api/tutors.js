@@ -76,7 +76,22 @@ function sortTutorsBySubjectMatch(student, tutors) {
 }
 
 export default (req, res, postprocessor=undefined) => {
-    let tutors = sortTutorsBySubjectMatch(new Map(Object.entries(req.query).map(([k, v]) => [k, v/100])), [{ratings: new Map([['chemistry', 1]]), name: "A"}, {ratings: new Map([['statistics', 1]]), name: "B"}, {ratings: new Map([['chemistry', 0.7], ['statistics', 0.7]]), name: "C"}, {ratings: new Map([['chemistry', 0.9], ['statistics', 0.9]]), name: "D"}]);
+    var mysql = require('mysql');
+    var con = mysql.createConnection({
+        host: "remotemysql.com",
+        user: "T3vawC4F4A",
+        password: "IlBdDMEA91",
+        database:"T3vawC4F4A"
+    });
+
+    con.connect(function(err) {
+    if (err){
+        //console.log(err)
+        return
+    }
+        //console.log("Connected to database!");
+    });
+    //let tutors = sortTutorsBySubjectMatch(new Map(Object.entries(req.query).map(([k, v]) => [k, v/100])), [{ratings: new Map([['chemistry', 1]]), name: "A"}, {ratings: new Map([['statistics', 1]]), name: "B"}, {ratings: new Map([['chemistry', 0.7], ['statistics', 0.7]]), name: "C"}, {ratings: new Map([['chemistry', 0.9], ['statistics', 0.9]]), name: "D"}]);
     if(postprocessor !== undefined) {
         tutors = postprocessor(tutors);
     }

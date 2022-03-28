@@ -76,6 +76,23 @@ function sortTutorsBySubjectMatch(student, tutors) {
 }
 
 export default (req, res, postprocessor=undefined) => {
+    var mysql = require('mysql');
+    var con = mysql.createConnection({
+        host: "remotemysql.com",
+        user: "T3vawC4F4A",
+        password: "IlBdDMEA91",
+        database:"T3vawC4F4A"
+    });
+    con.connect();
+    /* Below is for fetching data from the database. Result[0] would be what you could use.
+    con.query('Select Rating FROM Tutor WHERE Name = ${mysql.escape("Andrew")}', (err,result)=>{
+        if(err){
+           return
+        }
+        result[0]
+        
+    }
+    */
     let tutors = sortTutorsBySubjectMatch(new Map(Object.entries(req.query).map(([k, v]) => [k, v/100])), [{ratings: new Map([['chemistry', 1]]), name: "A"}, {ratings: new Map([['statistics', 1]]), name: "B"}, {ratings: new Map([['chemistry', 0.7], ['statistics', 0.7]]), name: "C"}, {ratings: new Map([['chemistry', 0.9], ['statistics', 0.9]]), name: "D"}]);
     if(postprocessor !== undefined) {
         tutors = postprocessor(tutors);

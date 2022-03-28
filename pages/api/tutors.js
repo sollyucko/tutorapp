@@ -75,28 +75,51 @@ function sortTutorsBySubjectMatch(student, tutors) {
     return scored;
 }
 
+const mysql = require('mysql');
+const con = mysql.createConnection({
+    host: "remotemysql.com",
+    user: "T3vawC4F4A",
+    password: "IlBdDMEA91",
+    database:"T3vawC4F4A"
+});
+con.connect(function(err) {
+    if (err){
+        console.log(err)
+        return
+    }
+    console.log("Connected to database!");
+});
+
 export default (req, res, postprocessor=undefined) => {
-    var mysql = require('mysql');
-    var con = mysql.createConnection({
-        host: "remotemysql.com",
-        user: "T3vawC4F4A",
-        password: "IlBdDMEA91",
-        database:"T3vawC4F4A"
-    });
-    con.connect();
-    /* Below is for fetching data from the database. Result[0] would be what you could use.
-    con.query('Select Rating FROM Tutor WHERE Name = ${mysql.escape("Andrew")}', (err,result)=>{
-        if(err){
-           return
+    let unsortedTutors;
+    con.query(`SELECT * FROM Tutor`, (err, result) => {
+        if(err) {
+            throw err;
         }
-        result[0]
-        
-    }
-    */
-    let tutors = sortTutorsBySubjectMatch(new Map(Object.entries(req.query).map(([k, v]) => [k, v/100])), [{ratings: new Map([['chemistry', 1]]), name: "A"}, {ratings: new Map([['statistics', 1]]), name: "B"}, {ratings: new Map([['chemistry', 0.7], ['statistics', 0.7]]), name: "C"}, {ratings: new Map([['chemistry', 0.9], ['statistics', 0.9]]), name: "D"}]);
-    if(postprocessor !== undefined) {
-        tutors = postprocessor(tutors);
-    }
-    res.status(200).json(tutors);
+        console.log(result);
+        // deep/recursive copy
+        unsortedTutors = JSON.parse(JSON.stringify(result));
+        console.log(unsortedTutors);
+        for(const tutor of unsortedTutors) {
+            tutor.ratings = new Map();
+        }
+        con.query(`SELECT * FROM Subject`, (err, result) => {
+            if(err) {
+                throw err;
+            }
+            for(const row of result) {
+                unsortedTutors[row.TutorID].ratings.set(row.Subject.toLowerCase().replace(/\s/g, "-"), row.Rating);
+            }
+            console.log(req.query);
+            let tutors = sortTutorsBySubjectMatch(new Map(Object.entries(req.query).map(([k, v]) => [k.toLowerCase(), v/100])), unsortedTutors);
+            console.log(tutors);
+            console.log(postprocessor);
+            if(postprocessor !== undefined) {
+                tutors = postprocessor(tutors);
+            }
+            console.log(tutors);
+            res.status(200).json(tutors);
+        });
+    });
 }
     

@@ -62,14 +62,18 @@ export default function Explore() {
   });
 
   React.useEffect(() => {
-    fetchData().then(data => {
-      if (!data) return;
-      setTutorData(data);
-    })
+    for(const subj of Object.keys(tutorData)) {
+        fetchData(subj).then(data => {
+          tutorData[subj] = data;
+          setTutorData(tutorData);
+        });
+    }
   }, []);
 
-  async function fetchData() {
-    const res = await fetch(``);
+  async function fetchData(subject) {
+    console.log(subject);
+    const res = await fetch(`/api/tutors/${subject}`);
+    console.log(subject, res);
     const json = await res.json();
     return json;
   }

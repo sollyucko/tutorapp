@@ -91,6 +91,7 @@ con.connect(function(err) {
 });
 
 export default (req, res, postprocessor=undefined) => {
+    console.log(req, res, postprocessor);
     let unsortedTutors;
     con.query(`SELECT * FROM Tutor`, (err, result) => {
         if(err) {
@@ -118,6 +119,7 @@ export default (req, res, postprocessor=undefined) => {
                 tutors = postprocessor(tutors);
             }
             console.log(tutors);
+            console.log(200);
             res.status(200).json(tutors);
         });
     });

@@ -62,14 +62,18 @@ export default function Explore() {
   });
 
   React.useEffect(() => {
-    fetchData().then(data => {
-      if (!data) return;
-      setTutorData(data);
-    })
+    for(const subj of Object.keys(tutorData)) {
+        fetchData(subj).then(data => {
+          tutorData[subj] = data;
+          setTutorData(tutorData);
+        });
+    }
   }, []);
 
-  async function fetchData() {
-    const res = await fetch(``);
+  async function fetchData(subject) {
+    console.log(subject);
+    const res = await fetch(`/api/tutors/${subject}`);
+    console.log(subject, res);
     const json = await res.json();
     return json;
   }
@@ -163,7 +167,7 @@ export default function Explore() {
                     <p className="text-sm text-slate-500">⭐️ {t.rating.toFixed(1)}</p>
                   </div>
                   <div className="flex-auto flex justify-end">
-                    <img className="h-14 w-14 rounded-full" src={t.tutor.icon} alt="John Doe"/>
+                    <img className="h-14 w-14 rounded-full" src={t.tutor.icon} alt=""/>
                   </div>
                 </div>
                 <p className="text-sm mt-2">{t.description}</p>

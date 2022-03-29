@@ -15,7 +15,7 @@ export default function Home() {
     <main>
       <div className="h-96 bg-blue-200 flex items-center justify-center">
         <h2 className="text-4xl font-semibold text-blue-500 underline decoration-4 decoration-blue-600">
-          insert motto here.
+          Students help Students!
         </h2>
       </div>
     </main>

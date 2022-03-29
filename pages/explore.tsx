@@ -167,7 +167,7 @@ export default function Explore() {
                     <p className="text-sm text-slate-500">⭐️ {t.rating.toFixed(1)}</p>
                   </div>
                   <div className="flex-auto flex justify-end">
-                    <img className="h-14 w-14 rounded-full" src={t.tutor.icon} alt="John Doe"/>
+                    <img className="h-14 w-14 rounded-full" src={t.tutor.icon} alt=""/>
                   </div>
                 </div>
                 <p className="text-sm mt-2">{t.description}</p>
